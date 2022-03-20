@@ -16,6 +16,8 @@
 		291952E027E2FD0A00970361 /* APIStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291952DF27E2FD0A00970361 /* APIStruct.swift */; };
 		291952E227E2FE3A00970361 /* APIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291952E127E2FE3A00970361 /* APIParser.swift */; };
 		29D1F2A327E7A6480025FC66 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D1F2A227E7A6480025FC66 /* SearchTableViewController.swift */; };
+		29D1F2A627E7AAC40025FC66 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D1F2A527E7AAC40025FC66 /* APIService.swift */; };
+		29D1F2A927E7AB0D0025FC66 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D1F2A827E7AB0D0025FC66 /* SearchResults.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		291952DF27E2FD0A00970361 /* APIStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIStruct.swift; sourceTree = "<group>"; };
 		291952E127E2FE3A00970361 /* APIParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIParser.swift; sourceTree = "<group>"; };
 		29D1F2A227E7A6480025FC66 /* SearchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		29D1F2A527E7AAC40025FC66 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		29D1F2A827E7AB0D0025FC66 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,18 +66,36 @@
 		291952CA27E2FCA600970361 /* News-Sentiment-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				29D1F2A727E7AAF40025FC66 /* Model */,
 				291952CB27E2FCA600970361 /* AppDelegate.swift */,
 				291952CD27E2FCA600970361 /* SceneDelegate.swift */,
-				291952DF27E2FD0A00970361 /* APIStruct.swift */,
-				291952E127E2FE3A00970361 /* APIParser.swift */,
 				291952CF27E2FCA600970361 /* ViewController.swift */,
 				29D1F2A227E7A6480025FC66 /* SearchTableViewController.swift */,
+				291952E127E2FE3A00970361 /* APIParser.swift */,
+				29D1F2A427E7AA5F0025FC66 /* Service */,
 				291952D127E2FCA600970361 /* Main.storyboard */,
 				291952D427E2FCA700970361 /* Assets.xcassets */,
 				291952D627E2FCA700970361 /* LaunchScreen.storyboard */,
 				291952D927E2FCA700970361 /* Info.plist */,
 			);
 			path = "News-Sentiment-UIKit";
+			sourceTree = "<group>";
+		};
+		29D1F2A427E7AA5F0025FC66 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				29D1F2A527E7AAC40025FC66 /* APIService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		29D1F2A727E7AAF40025FC66 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				291952DF27E2FD0A00970361 /* APIStruct.swift */,
+				29D1F2A827E7AB0D0025FC66 /* SearchResults.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,10 +170,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				291952D027E2FCA600970361 /* ViewController.swift in Sources */,
+				29D1F2A627E7AAC40025FC66 /* APIService.swift in Sources */,
 				29D1F2A327E7A6480025FC66 /* SearchTableViewController.swift in Sources */,
 				291952E027E2FD0A00970361 /* APIStruct.swift in Sources */,
 				291952CC27E2FCA600970361 /* AppDelegate.swift in Sources */,
 				291952CE27E2FCA600970361 /* SceneDelegate.swift in Sources */,
+				29D1F2A927E7AB0D0025FC66 /* SearchResults.swift in Sources */,
 				291952E227E2FE3A00970361 /* APIParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
