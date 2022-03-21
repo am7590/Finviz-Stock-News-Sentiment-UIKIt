@@ -10,12 +10,20 @@ import Combine
 
 class SearchTableViewController: UITableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
         
+    // Control which tableview is shown
+    private enum Mode {
+        case selected
+        case search
+    }
     
+    
+    @Published private var mode: Mode = .selected
     @Published private var searchQuery = String()
     private var searchResults: SearchResults?
     private let apiService = APIService()
     private var subscribers = Set<AnyCancellable>()
     var loading = true
+    var notSearchingQuery = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +40,11 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
                 .sink { [unowned self] (searchQuery) in
                     
                     // Stops function from searching empty query (bug fix)
-                    guard !searchQuery.isEmpty else {return}
+                    guard !searchQuery.isEmpty else {
+                        notSearchingQuery = true
+                        return
+                        
+                    }
                     
                     // Loading animation
                     // showLoadingAnimation()
@@ -65,15 +77,15 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
                 }.store(in: &subscribers)
             
             // Observe mode
-//            $mode.sink { [unowned self] (mode) in
-//                switch mode {
-//                case .onboarding:
-//                    self.tableView.backgroundView = SearchPlaceholderView()
-//
-//                case .search:
-//                    self.tableView.backgroundView = nil
-//                }
-//            }.store(in: &subscribers)
+            $mode.sink { [unowned self] (mode) in
+                switch mode {
+                case .selected:
+                    self.tableView.backgroundView = SelectedStockView() as? UIView
+
+                case .search:
+                    self.tableView.backgroundView = nil
+                }
+            }.store(in: &subscribers)
         }
      
 
@@ -111,19 +123,33 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
 extension SearchTableViewController {
     
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return searchResults?.items.count ?? 0
+            if notSearchingQuery {
+                return searchResults?.items.count ?? 0
+            } else {
+                return 0
+                
+            }
+            
         }
         
         
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
             if let searchResults = self.searchResults {
                 let searchResult = searchResults.items[indexPath.row]
                 
-                cell.textLabel?.text = searchResult.symbol
-                cell.detailTextLabel?.text = searchResult.name
+                if notSearchingQuery {
+                    cell.textLabel?.text = searchResult.symbol
+                    cell.detailTextLabel?.text = searchResult.name
+                } else {
+                    cell.textLabel?.text = "searchResult.symbol"
+                    cell.detailTextLabel?.text = "searchResult.name"
+                }
                 
             }
+            
+        
             
             return cell
         }
