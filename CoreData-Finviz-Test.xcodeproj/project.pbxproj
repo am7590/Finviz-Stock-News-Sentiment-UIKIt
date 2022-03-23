@@ -14,6 +14,13 @@
 		29204B1027EB8C1D00E01E12 /* CoreData_Finviz_Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 29204B0E27EB8C1D00E01E12 /* CoreData_Finviz_Test.xcdatamodeld */; };
 		29204B1227EB8C1E00E01E12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29204B1127EB8C1E00E01E12 /* Assets.xcassets */; };
 		29204B1527EB8C1E00E01E12 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29204B1327EB8C1E00E01E12 /* LaunchScreen.storyboard */; };
+		29204B1D27EB8CBB00E01E12 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B1C27EB8CBB00E01E12 /* DetailViewController.swift */; };
+		29204B1F27EB8D8A00E01E12 /* MyStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B1E27EB8D8A00E01E12 /* MyStocksViewController.swift */; };
+		29204B2127EB8D9500E01E12 /* SearchStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B2027EB8D9500E01E12 /* SearchStocksViewController.swift */; };
+		29204B2B27EB900400E01E12 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B2A27EB900400E01E12 /* SearchResults.swift */; };
+		29204B3427EB91A700E01E12 /* APIParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B3127EB91A600E01E12 /* APIParser.swift */; };
+		29204B3527EB91A700E01E12 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B3227EB91A600E01E12 /* APIService.swift */; };
+		29204B3627EB91A700E01E12 /* APIStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29204B3327EB91A600E01E12 /* APIStruct.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +33,13 @@
 		29204B1127EB8C1E00E01E12 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		29204B1427EB8C1E00E01E12 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		29204B1627EB8C1E00E01E12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29204B1C27EB8CBB00E01E12 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		29204B1E27EB8D8A00E01E12 /* MyStocksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStocksViewController.swift; sourceTree = "<group>"; };
+		29204B2027EB8D9500E01E12 /* SearchStocksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStocksViewController.swift; sourceTree = "<group>"; };
+		29204B2A27EB900400E01E12 /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
+		29204B3127EB91A600E01E12 /* APIParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIParser.swift; path = "../../News-Sentiment-UIKit/News-Sentiment-UIKit/Service copy/Service/APIParser.swift"; sourceTree = "<group>"; };
+		29204B3227EB91A600E01E12 /* APIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIService.swift; path = "../../News-Sentiment-UIKit/News-Sentiment-UIKit/Service copy/Service/APIService.swift"; sourceTree = "<group>"; };
+		29204B3327EB91A600E01E12 /* APIStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIStruct.swift; path = "../../News-Sentiment-UIKit/News-Sentiment-UIKit/Service copy/Service/APIStruct.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,9 +72,16 @@
 		29204B0427EB8C1D00E01E12 /* CoreData-Finviz-Test */ = {
 			isa = PBXGroup;
 			children = (
+				29204B2C27EB901C00E01E12 /* Model */,
 				29204B0527EB8C1D00E01E12 /* AppDelegate.swift */,
+				29204B3127EB91A600E01E12 /* APIParser.swift */,
+				29204B3227EB91A600E01E12 /* APIService.swift */,
+				29204B3327EB91A600E01E12 /* APIStruct.swift */,
 				29204B0727EB8C1D00E01E12 /* SceneDelegate.swift */,
 				29204B0927EB8C1D00E01E12 /* ViewController.swift */,
+				29204B1C27EB8CBB00E01E12 /* DetailViewController.swift */,
+				29204B1E27EB8D8A00E01E12 /* MyStocksViewController.swift */,
+				29204B2027EB8D9500E01E12 /* SearchStocksViewController.swift */,
 				29204B0B27EB8C1D00E01E12 /* Main.storyboard */,
 				29204B1127EB8C1E00E01E12 /* Assets.xcassets */,
 				29204B1327EB8C1E00E01E12 /* LaunchScreen.storyboard */,
@@ -68,6 +89,14 @@
 				29204B0E27EB8C1D00E01E12 /* CoreData_Finviz_Test.xcdatamodeld */,
 			);
 			path = "CoreData-Finviz-Test";
+			sourceTree = "<group>";
+		};
+		29204B2C27EB901C00E01E12 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				29204B2A27EB900400E01E12 /* SearchResults.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,7 +172,14 @@
 			files = (
 				29204B1027EB8C1D00E01E12 /* CoreData_Finviz_Test.xcdatamodeld in Sources */,
 				29204B0A27EB8C1D00E01E12 /* ViewController.swift in Sources */,
+				29204B3627EB91A700E01E12 /* APIStruct.swift in Sources */,
+				29204B1D27EB8CBB00E01E12 /* DetailViewController.swift in Sources */,
+				29204B2127EB8D9500E01E12 /* SearchStocksViewController.swift in Sources */,
+				29204B1F27EB8D8A00E01E12 /* MyStocksViewController.swift in Sources */,
 				29204B0627EB8C1D00E01E12 /* AppDelegate.swift in Sources */,
+				29204B3527EB91A700E01E12 /* APIService.swift in Sources */,
+				29204B2B27EB900400E01E12 /* SearchResults.swift in Sources */,
+				29204B3427EB91A700E01E12 /* APIParser.swift in Sources */,
 				29204B0827EB8C1D00E01E12 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
