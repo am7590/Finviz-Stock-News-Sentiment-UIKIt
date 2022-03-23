@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class SearchStocksViewController: UITableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
         
@@ -18,32 +19,62 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
     
     @Published private var searchQueryTextOccupied = false
     @Published private var mode: Mode = .selected
-    @Published private var orignalSearchQuery = ["TSLA", "GME"]
-    @Published private var searchQuery = String() {
-        didSet {
-              if searchQuery.count > 1 {
-                  print("changed")
-                  searchQueryTextOccupied = true
-                 //Update Table Data
-              } else {
-                  print("not changed")
-                  searchQueryTextOccupied = false
-                 //Hide Table and show so info of no data
-              }
-           }
-    }
+    @Published private var searchQuery = String()
     private var searchResults: SearchResults?
     private let apiService = APIService()
     private var subscribers = Set<AnyCancellable>()
     var loading = true
     var notSearchingQuery = false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         observeForm()
         // setupTableView()
+        fetchSecurities()
+        
+        
     }
+    
+    
+    // MARK: Core data
+    // Reference to Core Data managed object context
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    // Second table view
+    @Published private var orignalSearchQuery = ["TSLA", "GME"]
+
+    @Published private var listOfSecurities:[Stock]?
+    
+    
+    func addDummyStockData() {
+        // Add TSLA as starter data
+        let stock = NSEntityDescription.insertNewObject(forEntityName: "Stock", into: context) as! Stock
+        stock.name = "TSLA"
+    }
+    
+    func fetchSecurities() {
+        
+        do {
+            self.listOfSecurities = try context.fetch(Stock.fetchRequest())  // Get all items
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
+        } catch {
+            
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
     
     private func observeForm() {
             
@@ -51,10 +82,6 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
             $searchQuery
                 .debounce(for: .milliseconds(750), scheduler: RunLoop.main)
                 .sink { [unowned self] (searchQuery) in
-                    
-                    print(searchQueryTextOccupied)
-//                    print(searchQuery.isEmpty)
-//                    print(searchQuery.count)
                     
                     // Stops function from searching empty query (bug fix)
                     guard !searchQuery.isEmpty else {
@@ -97,16 +124,6 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
                     }.store(in: &self.subscribers)
                 }.store(in: &subscribers)
             
-            // Observe mode
-//            $mode.sink { [unowned self] (mode) in
-//                switch mode {
-//                case .selected:
-//                    self.tableView.backgroundView = SelectedStockView()
-//
-//                case .search:
-//                    self.tableView.backgroundView = nil
-//                }
-//            }.store(in: &subscribers)
         }
      
 
@@ -133,9 +150,6 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
         
         guard let searchQuery = searchController.searchBar.text,
               !searchQuery.isEmpty else {
-            //if !searchController.isActive {
-                //self.tableView.backgroundView = SelectedStockView()
-            //}
             
             return
             
@@ -150,7 +164,6 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
     
 //    private func filterTableView(searchText: String) {
 //        // Check out https://www.youtube.com/watch?v=DAHG0orOxKo for how to do this
-//        //i
 //    }
     
     
@@ -178,8 +191,8 @@ extension SearchStocksViewController {
                 return searchResults?.items.count ?? 0
                 
             }
-            return orignalSearchQuery.count
-   
+            //return orignalSearchQuery.count
+            return self.listOfSecurities?.count ?? 0
         }
         
         
@@ -208,11 +221,16 @@ extension SearchStocksViewController {
                
                 
             } else {
-                let searchResult = orignalSearchQuery[indexPath.row]
-                print("Search result: \(searchResult)")
+//                let searchResult = orignalSearchQuery[indexPath.row]
+//                print("Search result: \(searchResult)")
+//
+//                //if notSearchingQuery {
+//                cell.textLabel?.text = searchResult.description
                 
-                //if notSearchingQuery {
-                cell.textLabel?.text = searchResult.description
+                let security = self.listOfSecurities![indexPath.row]
+                cell.textLabel?.text = security.name
+                cell.detailTextLabel?.text = ""
+                
             }
             
         
@@ -220,27 +238,27 @@ extension SearchStocksViewController {
             return cell
         }
         
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//           let vc = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as? DetailViewController
-//           vc?.image = UIImage(named: names[indexPath.row] )!
-//           vc?.name = names[indexPath.row]
-//           navigationController?.pushViewController(vc!, animated: true)
-//    }
+
       
         override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             if let searchResults = self.searchResults {
                 let searchResult = searchResults.items[indexPath.item]
                 let symbol = searchResult.symbol
+                orignalSearchQuery.append(symbol)
+                print(orignalSearchQuery)
                 handleSelection(for: symbol, searchResult: searchResult)
                 
-                // Send data to SelectedStockView
-//                let vc = SelectedStockView()
-//                myArray.append(symbol)
-//                print("Adding \(searchResult.name) to myArray")
-//                print("myArray: \(myArray)")
-//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
-
+                // Save to core data
+                do {
+                    let newStock = Stock(context: self.context)
+                    newStock.name = symbol.uppercased()
+                    try self.context.save()
+                } catch {
+                    // Error
+                }
+               
+                // Re-fetch data
+                self.fetchSecurities()
                 
             }
             
@@ -256,38 +274,7 @@ extension SearchStocksViewController {
             // Loading animation
             // showLoadingAnimation()
             
-            // Fetch data
-//            apiService.fetchTimeSeriesMonthlyAdjustedPublisher(ticker: symbol).sink { (completionResult) in
-//                self.hideLoadingAnimation()
-//                switch completionResult {
-//                case .failure(let error):
-//                    print(error)
-//                case .finished: break  // Unlikely to happen
-//                }
-//
-//            } receiveValue: { (timeSeriesMonthlyAdjusted) in
-//                self.hideLoadingAnimation()
-//                let asset = Asset(searchResult: searchResult, timeSeriesMonthlyAdjusted: timeSeriesMonthlyAdjusted)
-//                self.performSegue(withIdentifier: "showCalculator", sender: asset)
-//    //            print("success: \(timeSeriesMonthlyAdjusted.getMonthInfo())")
-//                self.searchController.searchBar.text = nil  // Gets rid of redundent api calls after navigating back from calculator view
-//
-//
-//            }.store(in: &subscribers)
-     
-            
-            
-            //performSegue(withIdentifier: "showCalculator", sender: nil)
         }
-        
-    
-//            override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//                if segue.identifier == "showCalculator",
-//                    let destination = segue.destination as? Sele,
-//                    let asset = sender as? Asset {
-//                    destination.asset = asset
-//                }
-//            }
 }
 
 
