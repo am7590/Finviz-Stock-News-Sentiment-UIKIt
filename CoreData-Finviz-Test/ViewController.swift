@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Charts
 
 class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
     
     
+    @IBOutlet weak var barChart: BarChartView!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -20,6 +22,9 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         tableView.dataSource = self
         
         fetchSecurities()
+//        setupBarChart(data: sentimentArray)
+        
+
         // Do any additional setup after loading the view.
     }
     
@@ -36,8 +41,8 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
             self.listOfSecurities = try context.fetch(Stock.fetchRequest())  // Get all items
             
             for item in self.listOfSecurities! {
-                print(item.name)
                 getNews(ticker: item.name ?? "")
+                getSentiment(ticker: item.name ?? "")
             }
 //            DispatchQueue.main.async {
 //                self.tableView.reloadData()
@@ -48,6 +53,23 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         }
         
     }
+    
+    
+    // MARK: Charts
+    var sentimentArray = [String:Double]()
+    var dataEntries: [BarChartDataEntry] = []
+
+    
+    func setupBarChart() {
+        
+            
+                
+        let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Sentimenet")
+        let chartData = BarChartData(dataSet: chartDataSet)
+        barChart.data = chartData
+        
+    }
+    
     
     
     // MARK: Tableview
@@ -73,7 +95,7 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
             
             
             let news = newsArray[indexPath.row]
-            print(news)
+            // print(news)
             cell.textLabel?.text = news[0] + "       " + news[3]
             cell.detailTextLabel?.text = news[2] + " " + news[1] + " " + news[4]
             //cell.detailTextLabel?.text = news.
@@ -134,8 +156,14 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
                 
                 do {
                     let parsedJSON = try jsonDecoder.decode(SentimentStruct.self, from: data)
-                                        
-
+                    print(parsedJSON.content)
+                    self.sentimentArray = parsedJSON.content
+                    
+                    for item in self.sentimentArray {
+                        self.dataEntries.append( BarChartDataEntry(x: item.value, y: Double(item.key) ?? 0))
+                    }
+                    self.setupBarChart()
+                    
                 } catch {
                     print("Error parsing JSON")
                 }
