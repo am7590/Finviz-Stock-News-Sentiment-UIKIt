@@ -137,7 +137,7 @@ class SearchStocksViewController: UITableViewController, UISearchResultsUpdating
         sc.searchResultsUpdater = self
         sc.delegate = self
         sc.obscuresBackgroundDuringPresentation = false
-        sc.searchBar.placeholder = "Enter a company name or ticker symbol"
+        sc.searchBar.placeholder = "Search to add another stock"
         sc.searchBar.autocapitalizationType = .allCharacters
         sc.searchBar.scopeButtonTitles = ["Stocks", "Crypto"]
         return sc

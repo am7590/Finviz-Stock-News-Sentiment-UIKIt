@@ -63,7 +63,7 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
     func setupBarChart() {
         
             
-                
+        print(dataEntries)
         let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Sentimenet")
         let chartData = BarChartData(dataSet: chartDataSet)
         barChart.data = chartData
@@ -123,6 +123,11 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
                     let parsedJSON = try jsonDecoder.decode(NewsStruct.self, from: data)
                            
                     self.newsArray += (parsedJSON.content)
+                    
+                    
+                    self.newsArray = self.newsArray.sorted(by: {
+                        ($0[1], $0[2]) > ($1[1], $1[2])
+                    })
 
 
                 } catch {
