@@ -22,6 +22,7 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         tableView.dataSource = self
         
         fetchSecurities()
+        setupBarChart()
 //        setupBarChart(data: sentimentArray)
         
 
@@ -55,14 +56,13 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
     }
     
     
-    // MARK: Charts
+    // MARK: Populate Charts
     var sentimentArray = [String:Double]()
     var dataEntries: [BarChartDataEntry] = []
 
     
     func setupBarChart() {
         
-            
         print(dataEntries)
         let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Sentimenet")
         let chartData = BarChartData(dataSet: chartDataSet)
@@ -161,11 +161,16 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
                 
                 do {
                     let parsedJSON = try jsonDecoder.decode(SentimentStruct.self, from: data)
-                    print(parsedJSON.content)
+                    //print(parsedJSON.content)
                     self.sentimentArray = parsedJSON.content
                     
+                    //print(self.sentimentArray )
+                    
+                    var count: Int = 0
                     for item in self.sentimentArray {
-                        self.dataEntries.append( BarChartDataEntry(x: item.value, y: Double(item.key) ?? 0))
+                        print(item.value)
+                        self.dataEntries.append( BarChartDataEntry(x: Double(count), y: Double(item.value) ))
+                        count += 1
                     }
                     self.setupBarChart()
                     
