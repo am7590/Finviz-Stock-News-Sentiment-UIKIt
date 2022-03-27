@@ -238,6 +238,40 @@ extension SearchStocksViewController {
             return cell
         }
         
+    
+        
+        override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            if self.searchResults == nil {
+                // Create swipe action
+                let action = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+                    
+                    // Which person to remove
+                    let stockToRemove = self.listOfSecurities![indexPath.row]
+                    
+                    // Remove person
+                    self.context.delete(stockToRemove)
+                    
+                    // Save data
+                    do {
+                        try self.context.save()
+                    } catch {
+                        
+                    }
+                    
+                    // Re-fetch data
+                    self.fetchSecurities()
+               
+                    
+                }
+                let configuration = UISwipeActionsConfiguration(actions: [action])
+                     configuration.performsFirstActionWithFullSwipe = false
+                     return configuration
+            }
+            
+            return nil
+            
+            
+        }
 
       
         override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

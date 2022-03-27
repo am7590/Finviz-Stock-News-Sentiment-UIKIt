@@ -72,6 +72,8 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         print(dataEntries)
         let chartDataSet = BarChartDataSet(entries: dataEntries, label: "Sentimenet")
         let chartData = BarChartData(dataSet: chartDataSet)
+        chartDataSet.colors = ChartColorTemplates.colorful()
+
         barChart.data = chartData
         
     }
@@ -85,7 +87,7 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if loading {
-            return 1
+            return 0
         } else {
             return newsArray.count
         }
@@ -93,7 +95,8 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as! ViewControllerTableViewCell
-        
+        cell.selectionStyle = .none
+
         // Configure cells
         if loading {
             //cell.textLabel?.text = "Loading news..."
@@ -114,6 +117,16 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let news = newsArray[indexPath.row]
+        let urlString = news[5]
+            if let url = URL(string: urlString)
+            {
+                UIApplication.shared.openURL(url)
+            }
+    }
+    
     
 
     // MARK: Get API data
@@ -213,15 +226,7 @@ class ViewControllerTableViewCell: UITableViewCell {
         sourceLabel?.text = news[4]
         timeLabel?.text = news[1]
         dateLabel?.text = news[2]
-        
-        
-        
-//        assetNameLabel.text = searchResult.name
-//        assetSymbolLabel.text = searchResult.symbol
-//        assetTypeLabel.text = searchResult.type
-//            .appending(" ")
-//            .appending(searchResult.currency)
-        
+          
     }
     
     
