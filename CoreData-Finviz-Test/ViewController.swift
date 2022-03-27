@@ -8,11 +8,12 @@
 import UIKit
 import Charts
 
+
 class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
     
     
-    @IBOutlet weak var barChart: BarChartView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var barChart: BarChartView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +22,7 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         tableView.delegate = self
         tableView.dataSource = self
         
-        fetchSecurities()
+        //fetchSecurities()
         setupBarChart()
 //        setupBarChart(data: sentimentArray)
         
@@ -29,6 +30,11 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+        fetchSecurities()
+        setupBarChart()
+    }
     
     
     // MARK: Get stock data from CoreData
@@ -86,18 +92,23 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as! ViewControllerTableViewCell
         
         // Configure cells
         if loading {
-            cell.textLabel?.text = "Loading news..."
+            //cell.textLabel?.text = "Loading news..."
         } else {
             
             
             let news = newsArray[indexPath.row]
+            cell.configure(with: news)
             // print(news)
-            cell.textLabel?.text = news[0] + "       " + news[3]
-            cell.detailTextLabel?.text = news[2] + " " + news[1] + " " + news[4]
+            
+            // News data points: Ticker, Date, Time, Title, Source, Link
+            
+            
+            //cell.textLabel?.text = news[0] + "       " + news[3]
+            //cell.detailTextLabel?.text = news[2] + " " + news[1] + " " + news[4]
             //cell.detailTextLabel?.text = news.
         }
         
@@ -186,3 +197,32 @@ class ViewController: UIViewController, UITableViewDelegate,  UITableViewDataSou
 
 }
 
+
+class ViewControllerTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var tickerLabel: UILabel!
+    @IBOutlet weak var headlineLabel: UILabel!
+    @IBOutlet weak var sourceLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+
+    func configure(with news: [String]) {
+        
+        tickerLabel?.text = news[0]
+        headlineLabel?.text = news[3]
+        sourceLabel?.text = news[4]
+        timeLabel?.text = news[1]
+        dateLabel?.text = news[2]
+        
+        
+        
+//        assetNameLabel.text = searchResult.name
+//        assetSymbolLabel.text = searchResult.symbol
+//        assetTypeLabel.text = searchResult.type
+//            .appending(" ")
+//            .appending(searchResult.currency)
+        
+    }
+    
+    
+}
